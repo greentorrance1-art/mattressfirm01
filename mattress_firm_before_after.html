@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mattress Firm — UX Redesign Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--navy:#1B2A4A;--gold:#f0c040;
+  --white:#fff;--dark:#1a1d23;--mid:#4a5568;--muted:#8492a6;
+  --border:#e2e8f0;--bg:#f5f6f8;
+  --bad:#ff4444;--good:#22c55e;
+}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#f0f2f5;padding:24px 16px;min-height:100vh}
+
+/* ── HEADER ── */
+.case-header{text-align:center;margin-bottom:32px}
+.case-tag{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
+.case-title{font-size:28px;font-weight:800;color:var(--dark);line-height:1.2;margin-bottom:8px}
+.case-sub{font-size:14px;color:var(--mid);max-width:500px;margin:0 auto;line-height:1.6}
+
+/* ── TOGGLE ── */
+.toggle-row{display:flex;background:#e2e8f0;border-radius:50px;padding:4px;max-width:320px;margin:0 auto 28px;gap:4px}
+.toggle-btn{flex:1;padding:10px;border:none;border-radius:46px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;background:transparent;color:var(--mid)}
+.toggle-btn.active{background:#fff;color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,0.12)}
+.toggle-btn.before.active{color:var(--bad)}
+.toggle-btn.after.active{color:var(--good)}
+
+/* ── VIEWS ── */
+.view{display:none;animation:fadeIn 0.25s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PHONE FRAME ── */
+.phone-wrap{display:flex;justify-content:center;margin-bottom:24px}
+.phone{width:100%;max-width:375px;background:#fff;border-radius:32px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);border:6px solid #1a1d23;position:relative}
+
+/* ── ANNOTATION LABELS ── */
+.annotations{max-width:375px;margin:0 auto 24px;display:flex;flex-direction:column;gap:8px}
+.ann{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px}
+.ann.bad{background:#fff5f5;border:1px solid #fecaca}
+.ann.good{background:#f0fdf4;border:1px solid #bbf7d0}
+.ann-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;font-weight:700}
+.ann-dot.bad{background:#fee2e2;color:var(--bad)}
+.ann-dot.good{background:#dcfce7;color:var(--good)}
+.ann-body{}
+.ann-title{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:2px}
+.ann-desc{font-size:12px;color:var(--mid);line-height:1.5}
+
+/* ── SUMMARY BAR ── */
+.summary{max-width:375px;margin:0 auto;padding:14px 16px;border-radius:12px;font-size:13px;line-height:1.6}
+.summary.bad{background:#fff5f5;border:1px solid #fecaca;color:colors.HexColor('#7f1d1d')}
+.summary.good{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.summary strong{font-weight:700}
+
+/* ══════════════════════════════
+   BEFORE — site mockup styles
+══════════════════════════════ */
+.announce{background:var(--navy);color:#fff;text-align:center;padding:9px 12px;font-size:11px;line-height:1.4}
+.announce a{color:var(--gold);text-decoration:underline}
+.mf-header{background:#fff;border-bottom:1px solid var(--border);padding:11px 14px;display:flex;align-items:center;justify-content:space-between}
+.mf-logo{font-size:18px;font-weight:800;color:var(--red);letter-spacing:-0.5px;font-style:italic}
+.mf-logo span{color:var(--dark)}
+.hicons{display:flex;gap:14px}
+.hicons svg{width:20px;height:20px;stroke:var(--dark);fill:none;stroke-width:1.8}
+.mf-search{padding:9px 14px;background:#fff;border-bottom:1px solid var(--border)}
+.search-inner{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 12px}
+.search-inner svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0}
+.s-label{font-size:12px;font-weight:600;color:var(--dark)}
+.s-sub{font-size:10px;color:var(--muted)}
+.store-bar{padding:9px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);font-size:12px;color:var(--mid)}
+.store-bar svg{width:14px;height:14px;stroke:var(--mid);fill:none;stroke-width:2}
+.hero{background:var(--red);padding:22px 16px;text-align:center;color:#fff;position:relative}
+.sale-tag{background:var(--gold);color:#1a1d23;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px}
+.hero-title{font-size:28px;font-weight:800;line-height:1}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-size:12px;opacity:0.9;margin:6px 0 12px}
+.hero-btn{background:#fff;color:var(--red);border:none;border-radius:5px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* clutter elements */
+.chat-widget{position:absolute;bottom:12px;right:10px;background:var(--red);color:#fff;border-radius:30px;padding:8px 14px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.chat-widget .avatar{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.chat-widget .avatar svg{width:14px;height:14px;stroke:var(--red);fill:none;stroke-width:2}
+.coupon-bar{background:#1a1d23;color:#fff;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600}
+.coupon-bar svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;cursor:pointer}
+.finance-strip{background:var(--navy);padding:12px 14px;display:flex;align-items:center;gap:10px}
+.fin-logo{width:36px;height:36px;border-radius:5px;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fin-logo svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2}
+.fin-text{color:#fff;font-size:11px;line-height:1.4}
+.fin-text strong{display:block;font-size:13px}
+
+/* popup overlay */
+.popup-overlay{background:rgba(0,0,0,0.5);padding:16px;position:relative}
+.popup-box{background:#fff;border-radius:12px;padding:20px 16px;text-align:center;position:relative}
+.popup-close{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;background:#f0f2f5;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.popup-close svg{width:12px;height:12px;stroke:var(--mid);fill:none;stroke-width:2}
+.popup-headline{font-size:14px;color:var(--dark);margin-bottom:6px;line-height:1.4}
+.popup-offer{font-size:28px;font-weight:800;color:var(--red);line-height:1}
+.popup-offer-sub{font-size:12px;color:var(--mid);margin-bottom:14px}
+.popup-input{border:1px solid var(--border);border-radius:6px;padding:10px 12px;width:100%;font-size:12px;margin-bottom:10px;font-family:inherit;color:var(--dark)}
+.popup-cta{background:#d1d5db;color:#fff;border:none;border-radius:6px;padding:12px;width:100%;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.popup-fine{font-size:9px;color:var(--muted);margin-top:8px;line-height:1.4;text-align:left}
+
+/* problem badges */
+.pbadge{position:absolute;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;white-space:nowrap;z-index:10;letter-spacing:0.04em}
+
+/* ══════════════════════════════
+   AFTER — clean redesign
+══════════════════════════════ */
+.finder-hero{background:linear-gradient(160deg,#1a1d23 0%,#2d3748 100%);padding:28px 20px 24px;text-align:center;color:#fff}
+.finder-tag{display:inline-block;background:rgba(200,16,46,0.2);border:1px solid rgba(200,16,46,0.5);color:#ff8099;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px}
+.finder-h{font-size:24px;font-weight:800;line-height:1.2;margin-bottom:8px}
+.finder-h span{color:var(--red)}
+.finder-p{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:20px;line-height:1.5}
+.finder-btn-main{background:var(--red);color:#fff;border:none;border-radius:50px;padding:15px 32px;font-size:15px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:opacity 0.15s;margin-bottom:8px}
+.finder-btn-main:hover{opacity:0.9}
+.finder-hint-txt{font-size:11px;color:rgba(255,255,255,0.5)}
+.after-search{padding:10px 14px;background:#fff;border-bottom:1px solid var(--border)}
+.sale-strip{background:#fff5f5;border-top:3px solid var(--red);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.sale-strip-left{font-size:13px;font-weight:700;color:var(--dark)}
+.sale-strip-left span{color:var(--red)}
+.sale-strip-right{font-size:11px;color:var(--mid);text-align:right}
+.sale-strip-link{font-size:12px;font-weight:600;color:var(--red);text-decoration:none;display:block;margin-top:2px}
+
+/* quiz sheet */
+.quiz-overlay{background:rgba(0,0,0,0.5);padding-top:60px}
+.quiz-sheet{background:#fff;border-radius:20px 20px 0 0;padding:0 0 20px}
+.quiz-handle{width:32px;height:3px;background:var(--border);border-radius:2px;margin:10px auto 0}
+.qpbar{height:3px;background:var(--border);margin:10px 18px 0;border-radius:2px}
+.qpfill{height:100%;background:var(--red);border-radius:2px;width:25%}
+.qscreen{padding:16px 18px}
+.qlabel{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.qtitle{font-size:20px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.qsub{font-size:12px;color:var(--mid);margin-bottom:14px}
+.qcards{display:flex;flex-direction:column;gap:7px}
+.qcard{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px}
+.qcard.sel{border-color:var(--red);background:var(--red-light,#fdecea)}
+.qcard-icon{width:34px;height:34px;border-radius:8px;background:#f0f4f8;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qcard-t{font-size:13px;font-weight:600;color:var(--dark)}
+.qcard-d{font-size:11px;color:var(--mid)}
+.qcard-chk{width:18px;height:18px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0}
+.qcard-chk svg{width:9px;height:9px;stroke:#fff;fill:none;stroke-width:2.5}
+.qbtn{background:var(--red);color:#fff;border:none;border-radius:50px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;width:100%;font-family:inherit;margin-top:14px}
+</style>
+</head>
+<body>
+
+<!-- CASE HEADER -->
+<div class="case-header">
+  <div class="case-tag">UX Case Study</div>
+  <h1 class="case-title">Mattress Firm — Finder Redesign</h1>
+  <p class="case-sub">The current experience creates attention competition before the user reaches a recommendation. This is what that looks like — and what a focused redesign does instead.</p>
+</div>
+
+<!-- TOGGLE -->
+<div class="toggle-row">
+  <button class="toggle-btn before active" onclick="show('before')">Before — Current Site</button>
+  <button class="toggle-btn after" onclick="show('after')">After — Redesign</button>
+</div>
+
+<!-- ═══════════════════ BEFORE ═══════════════════ -->
+<div class="view active" id="before">
+
+  <div class="annotations">
+    <div class="ann bad">
+      <div class="ann-dot bad">1</div>
+      <div class="ann-body">
+        <div class="ann-title">Coupon capture competes immediately</div>
+        <div class="ann-desc">A 15% off bar fires before the user has a clear primary action. It competes with the search bar, hero banner, and chat widget simultaneously.</div>
+      </div>
+    </div>
+    <div class="ann bad">
+      <div class="ann-dot bad">2</div>
+      <div class="ann-body">
+        <div class="ann-title">Email pop-up blocks the entire screen</div>
+        <div class="ann-desc">The user hasn't done anything yet. An immediate full-screen interrupt to capture email creates distrust before the experience even starts.</div>
+      </div>
+    </div>
+    <div class="ann bad">
+      <div class="ann-dot bad">3</div>
+      <div class="ann-body">
+        <div class="ann-title">Chat widget fights the hero banner</div>
+        <div class="ann-desc">"Chat with a Sleep Expert" overlays the promotional hero, creating a visual conflict. Two calls to action at the same visual weight — neither wins.</div>
+      </div>
+    </div>
+    <div class="ann bad">
+      <div class="ann-dot bad">4</div>
+      <div class="ann-body">
+        <div class="ann-title">No clear primary action anywhere</div>
+        <div class="ann-desc">The user is asked to: search, shop the sale, get a coupon, chat, opt into financing, and find their match — all at once. Decision paralysis before a single product is seen.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-wrap">
+    <div class="phone">
+      <!-- Announce -->
+      <div class="announce" style="position:relative">
+        Your purchase may be HSA/FSA eligible. <a href="#">Learn How</a>
+        <span class="pbadge" style="top:6px;right:8px">① Low priority — top slot</span>
+      </div>
+      <!-- Header -->
+      <div class="mf-header">
+        <div style="width:20px;cursor:pointer"><svg viewBox="0 0 20 20" fill="none" stroke="#1a1d23" stroke-width="1.8" width="20" height="20"><path d="M2 5h16M2 10h16M2 15h16"/></svg></div>
+        <div class="mf-logo">Mattress<span>Firm</span></div>
+        <div class="hicons">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.54 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013.44 1.27h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.78a16 16 0 006.29 6.29l1.08-1.78a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15.92z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+      </div>
+      <!-- Search -->
+      <div class="mf-search" style="position:relative">
+        <div class="search-inner">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div><div class="s-label">What brings you in today?</div><div class="s-sub">Search for brands...</div></div>
+        </div>
+      </div>
+      <!-- Store -->
+      <div class="store-bar">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        My store: <strong>&nbsp;Mattress Firm University</strong>
+        <svg style="margin-left:auto" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#8492a6" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <!-- Hero with chat widget -->
+      <div class="hero" style="position:relative">
+        <div class="sale-tag">Ends Monday</div>
+        <div class="hero-title">72 Hour <span>SALE</span></div>
+        <div class="hero-sub">Up to 60% OFF · Queens from $189.99</div>
+        <button class="hero-btn">Shop Now</button>
+        <div class="chat-widget" style="position:relative;margin:12px auto 0;width:fit-content">
+          <div class="avatar"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+          Chat with a Sleep Expert®
+        </div>
+        <span class="pbadge" style="top:8px;left:8px">③ Chat fights hero</span>
+      </div>
+      <!-- Coupon bar -->
+      <div class="coupon-bar" style="position:relative">
+        15% OFF SELECT PRODUCTS
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <span class="pbadge" style="top:6px;left:50%;transform:translateX(-50%)">① Coupon competes instantly</span>
+      </div>
+      <!-- Pop-up -->
+      <div class="popup-overlay" style="position:relative">
+        <span class="pbadge" style="top:8px;left:50%;transform:translateX(-50%)">② Full-screen interrupt — no action taken yet</span>
+        <div class="popup-box" style="margin-top:20px">
+          <div class="popup-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="popup-headline">Sign up for our emails to get this special offer:</div>
+          <div class="popup-offer">An Extra 15% Off*</div>
+          <div class="popup-offer-sub">select products</div>
+          <input class="popup-input" placeholder="Email Address" type="email"/>
+          <button class="popup-cta">Get My Coupon</button>
+          <div class="popup-fine">*Your first order of $699+. Cannot be combined with other coupons. Not valid on Purple®, Serta® iComfort®, Tempur-Pedic®...</div>
+        </div>
+      </div>
+      <!-- Finance -->
+      <div class="finance-strip" style="position:relative">
+        <div class="fin-logo"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></div>
+        <div class="fin-text"><strong>Get 0% interest for 72 months</strong>On purchases of $3,299+.</div>
+        <span class="pbadge" style="bottom:6px;right:8px">④ 4th competing message</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary bad">
+    <strong>Result:</strong> The user lands on a page with 4 competing calls to action firing before they've done anything. The "Find Your Top Matches" label exists but is buried. The gap between what the site promises and how it actually behaves erodes confidence before anyone reaches a product.
+  </div>
+</div>
+
+<!-- ═══════════════════ AFTER ═══════════════════ -->
+<div class="view" id="after">
+
+  <div class="annotations">
+    <div class="ann good">
+      <div class="ann-dot good">✓</div>
+      <div class="ann-body">
+        <div class="ann-title">One clear primary action above the fold</div>
+        <div class="ann-desc">The Sleep Match finder is the first thing the user sees. One headline, one subline, one button. No competition.</div>
+      </div>
+    </div>
+    <div class="ann good">
+      <div class="ann-dot good">✓</div>
+      <div class="ann-body">
+        <div class="ann-title">Sale info stays — but doesn't lead</div>
+        <div class="ann-desc">The 72 Hour Sale is preserved as a quiet strip below the finder. It supports the decision without interrupting it.</div>
+      </div>
+    </div>
+    <div class="ann good">
+      <div class="ann-dot good">✓</div>
+      <div class="ann-body">
+        <div class="ann-title">Pop-up, coupon bar, and chat widget removed</div>
+        <div class="ann-desc">All three attention-competing elements are gone. Nothing fires before the user takes an action. Trust is built before a sale is attempted.</div>
+      </div>
+    </div>
+    <div class="ann good">
+      <div class="ann-dot good">✓</div>
+      <div class="ann-body">
+        <div class="ann-title">Quiz closes the loop — result reflects the user</div>
+        <div class="ann-desc">The result screen mirrors the user's own answers back to them. It feels personal, not algorithmic — which is exactly what the floor experience does.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-wrap">
+    <div class="phone">
+      <!-- Clean header -->
+      <div class="announce" style="background:var(--navy)">
+        Your purchase may be HSA/FSA eligible. <a href="#">Learn How</a>
+      </div>
+      <div class="mf-header">
+        <div style="width:20px;cursor:pointer"><svg viewBox="0 0 20 20" fill="none" stroke="#1a1d23" stroke-width="1.8" width="20" height="20"><path d="M2 5h16M2 10h16M2 15h16"/></svg></div>
+        <div class="mf-logo">Mattress<span>Firm</span></div>
+        <div class="hicons">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.54 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013.44 1.27h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.78a16 16 0 006.29 6.29l1.08-1.78a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15.92z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+      </div>
+      <!-- Clean search -->
+      <div class="after-search">
+        <div class="search-inner">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#8492a6" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div><div class="s-label">What brings you in today?</div><div class="s-sub">Search how to get the best sleep...</div></div>
+        </div>
+      </div>
+      <!-- FINDER HERO — main event -->
+      <div class="finder-hero">
+        <div class="finder-tag">Sleep Match — New</div>
+        <div class="finder-h">Find your <span>best match.</span><br>In 2 minutes.</div>
+        <div class="finder-p">Tell us how you sleep. We'll handle the rest — no searching, no overwhelm.</div>
+        <button class="finder-btn-main" onclick="openQ()">Find My Match</button>
+        <div class="finder-hint-txt">Takes about 2 minutes · No account needed</div>
+      </div>
+      <!-- Sale as quiet strip -->
+      <div class="sale-strip">
+        <div>
+          <div class="sale-strip-left">72 Hour <span>SALE</span> — Ends Monday</div>
+          <div class="sale-strip-right" style="font-size:11px;color:var(--mid)">Up to 60% off · Queens from $189.99</div>
+        </div>
+        <a class="sale-strip-link" href="#">Shop →</a>
+      </div>
+      <!-- Quiz sheet -->
+      <div class="quiz-overlay" id="quizOverlay" style="display:none">
+        <div class="quiz-sheet">
+          <div class="quiz-handle"></div>
+          <div class="qpbar"><div class="qpfill" id="qpf"></div></div>
+          <!-- Q1 -->
+          <div class="qscreen" id="qq1" style="display:block">
+            <div class="qlabel">Step 1 of 4</div>
+            <div class="qtitle">How do you sleep?</div>
+            <div class="qsub">This helps us recommend the right support level.</div>
+            <div class="qcards">
+              <div class="qcard sel">
+                <div class="qcard-icon"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M3 14c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="#C8102E" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="6" r="2.5" stroke="#C8102E" stroke-width="1.8"/><path d="M2 17h18" stroke="#C8102E" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+                <div><div class="qcard-t">Side Sleeper</div><div class="qcard-d">Pressure relief at shoulder &amp; hip</div></div>
+                <div class="qcard-chk"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+              </div>
+              <div class="qcard">
+                <div class="qcard-icon"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><rect x="3" y="13" width="16" height="4" rx="2" stroke="#C8102E" stroke-width="1.8"/><circle cx="11" cy="8" r="2.5" stroke="#C8102E" stroke-width="1.8"/><path d="M7 13v-2a4 4 0 018 0v2" stroke="#C8102E" stroke-width="1.8"/></svg></div>
+                <div><div class="qcard-t">Back Sleeper</div><div class="qcard-d">Lumbar support &amp; alignment</div></div>
+              </div>
+              <div class="qcard">
+                <div class="qcard-icon"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><ellipse cx="11" cy="13" rx="7" ry="3" stroke="#C8102E" stroke-width="1.8"/><circle cx="11" cy="7" r="2.5" stroke="#C8102E" stroke-width="1.8"/></svg></div>
+                <div><div class="qcard-t">Stomach Sleeper</div><div class="qcard-d">Firmer support to prevent arching</div></div>
+              </div>
+              <div class="qcard">
+                <div class="qcard-icon"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M4 14c1.5-3 4-4 7-2s5.5 1 7-2" stroke="#C8102E" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="7" r="2.5" stroke="#C8102E" stroke-width="1.8"/></svg></div>
+                <div><div class="qcard-t">Combination Sleeper</div><div class="qcard-d">Switches positions at night</div></div>
+              </div>
+            </div>
+            <button class="qbtn" onclick="nextQ(2,50)">Continue</button>
+          </div>
+          <!-- Q2 result preview -->
+          <div class="qscreen" id="qq2" style="display:none">
+            <div class="qlabel">Step 2 of 4</div>
+            <div class="qtitle">What feel do you prefer?</div>
+            <div class="qsub">Choose what sounds most appealing.</div>
+            <div class="qcards">
+              <div class="qcard"><div class="qcard-icon" style="background:#fdf0ff"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M4 15c2-4 4-6 7-6s5 2 7 6" stroke="#9333ea" stroke-width="1.8" stroke-linecap="round"/></svg></div><div><div class="qcard-t">Plush</div><div class="qcard-d">Soft, cloud-like comfort</div></div></div>
+              <div class="qcard sel"><div class="qcard-icon" style="background:#f0fdf4"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M4 12h14M4 16h14M4 8h14" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round"/></svg></div><div><div class="qcard-t">Medium</div><div class="qcard-d">Balanced support &amp; softness</div></div><div class="qcard-chk"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+              <div class="qcard"><div class="qcard-icon" style="background:#fff7ed"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><rect x="4" y="8" width="14" height="8" rx="2" stroke="#ea580c" stroke-width="1.8"/></svg></div><div><div class="qcard-t">Firm</div><div class="qcard-d">Solid, supportive feel</div></div></div>
+              <div class="qcard"><div class="qcard-icon"><svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="7" stroke="#8492a6" stroke-width="1.8"/><path d="M9 9c0-1.1.9-2 2-2s2 .9 2 2v1.5" stroke="#8492a6" stroke-width="1.8" stroke-linecap="round"/></svg></div><div><div class="qcard-t">Not sure</div><div class="qcard-d">We'll help you decide</div></div></div>
+            </div>
+            <button class="qbtn" onclick="nextQ(3,75)">Continue</button>
+          </div>
+          <!-- Result -->
+          <div class="qscreen" id="qq3" style="display:none;text-align:center">
+            <div style="width:48px;height:48px;border-radius:50%;background:#e6f9f0;display:flex;align-items:center;justify-content:center;margin:8px auto 12px">
+              <svg width="22" height="22" viewBox="0 0 28 28" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5,14 11,20 23,8"/></svg>
+            </div>
+            <div style="font-size:20px;font-weight:700;color:var(--dark);margin-bottom:4px">Your perfect match</div>
+            <div style="font-size:12px;color:var(--mid);margin-bottom:14px">Based on your sleep preferences</div>
+            <div style="background:linear-gradient(135deg,#fff5f5,#fff);border:1.5px solid #f5c6c6;border-radius:12px;padding:16px;text-align:left">
+              <div style="font-size:17px;font-weight:700;color:var(--dark)">Serene Cloud Plush</div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Memory Foam Mattress</div>
+              <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+                <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Why this fits you</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--dark)"><div style="width:16px;height:16px;border-radius:50%;background:#fdecea;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#C8102E" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>Designed for side sleepers</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--dark)"><div style="width:16px;height:16px;border-radius:50%;background:#fdecea;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#C8102E" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>Medium balanced feel</div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dark)"><div style="width:16px;height:16px;border-radius:50%;background:#fdecea;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#C8102E" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>Cooling gel-infused foam</div>
+              </div>
+            </div>
+            <button class="qbtn" style="margin-top:14px">View Mattress Details</button>
+            <div style="font-size:11px;color:var(--muted);margin-top:8px;cursor:pointer" onclick="closeQ()">Not quite right? Browse full collection</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary good">
+    <strong>Result:</strong> One clear primary action above the fold. The sale stays visible but doesn't lead. Pop-up, coupon interrupt, and chat widget removed. The quiz guides the user through 4 focused questions and closes with a result that reflects their own answers — building trust instead of competing for attention.
+  </div>
+</div>
+
+<script>
+function show(tab){
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
+  document.querySelectorAll('.toggle-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById(tab).classList.add('active');
+  document.querySelectorAll('.toggle-btn.'+tab).forEach(function(b){b.classList.add('active')});
+}
+function openQ(){
+  document.getElementById('quizOverlay').style.display='block';
+  document.getElementById('qpf').style.width='25%';
+}
+function closeQ(){
+  document.getElementById('quizOverlay').style.display='none';
+  ['qq1','qq2','qq3'].forEach(function(id){document.getElementById(id).style.display='none'});
+  document.getElementById('qq1').style.display='block';
+  document.getElementById('qpf').style.width='25%';
+}
+function nextQ(n,pct){
+  ['qq1','qq2','qq3'].forEach(function(id){document.getElementById(id).style.display='none'});
+  document.getElementById('qq'+n).style.display='block';
+  document.getElementById('qpf').style.width=pct+'%';
+}
+</script>
+</body>
+</html>
